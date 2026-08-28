@@ -247,3 +247,32 @@ body {
     background: #f5f7ff;
     box-shadow: 0 6px 18px rgba(102, 126, 234, 0.25);
 }
+
+/* ---- No-JS / SEO fallback content (inside <noscript>) ---- */
+.seo-fallback {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 28px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1f2937;
+    line-height: 1.65;
+}
+
+.seo-fallback h1 {
+    font-size: 1.9rem;
+    margin-bottom: 18px;
+    line-height: 1.25;
+}
+
+.seo-fallback h2 {
+    font-size: 1.3rem;
+    margin: 26px 0 10px;
+}
+
+.seo-fallback ul {
+    margin: 12px 0 12px 22px;
+}
+
+.seo-fallback li {
+    margin-bottom: 8px;
+}

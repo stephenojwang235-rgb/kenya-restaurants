@@ -7,25 +7,92 @@
 
     <!-- Primary Meta Tags -->
     <meta name="description" content="Live interactive map that finds restaurants near you in Kenya that don't yet have a website. Browse phone & WhatsApp contacts, search by town or county, and export to Excel.">
-    <meta name="keywords" content="Kenya restaurants, restaurant finder, restaurants without websites, dining Kenya, Nairobi restaurants, food map Kenya, restaurant directory Kenya">
+    <meta name="keywords" content="Kenya restaurants, restaurant finder, restaurants without websites, dining Kenya, Nairobi restaurants, food map Kenya, restaurant directory Kenya, Kenya food guide, Mombasa restaurants, Kisumu restaurants">
     <meta name="author" content="Kenya Restaurant Finder">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="google" content="notranslate">
     <meta name="theme-color" content="#667eea">
+    <meta name="format-detection" content="telephone=yes">
     <link rel="canonical" href="https://stephenojwang235-rgb.github.io/kenya-restaurants/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Kenya Restaurant Finder">
+    <meta property="og:locale" content="en_KE">
     <meta property="og:url" content="https://stephenojwang235-rgb.github.io/kenya-restaurants/">
     <meta property="og:title" content="Kenya Restaurant Finder — Discover Restaurants Without Websites">
     <meta property="og:description" content="Live map that finds restaurants near you in Kenya that don't yet have a website. Phone & WhatsApp contacts, town/county search, and Excel export.">
-    <meta property="og:site_name" content="Kenya Restaurant Finder">
+    <meta property="og:image" content="https://stephenojwang235-rgb.github.io/kenya-restaurants/static/og-image.png">
+    <meta property="og:image:secure_url" content="https://stephenojwang235-rgb.github.io/kenya-restaurants/static/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Kenya Restaurant Finder — live map of Kenyan restaurants without a website">
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kenya Restaurant Finder — Discover Restaurants Without Websites">
     <meta name="twitter:description" content="Live interactive map of restaurants in Kenya that don't yet have a website. Search by location or county, get phone/WhatsApp contacts, export to Excel.">
+    <meta name="twitter:image" content="https://stephenojwang235-rgb.github.io/kenya-restaurants/static/og-image.png">
+    <meta name="twitter:image:alt" content="Kenya Restaurant Finder — live map of Kenyan restaurants without a website">
 
-    <!-- Favicon (emoji-based, no external file needed) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽️</text></svg>">
+    <!-- PWA / icons -->
+    <link rel="manifest" href="static/manifest.webmanifest">
+    <link rel="icon" href="static/icon-192.png" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="static/apple-touch-icon.png" sizes="180x180">
+    <meta name="apple-mobile-web-app-title" content="KE Restaurants">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Performance hints: warm up third-party origins we always need -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdn.sheetjs.com" crossorigin>
+    <link rel="dns-prefetch" href="https://tile.openstreetmap.org">
+    <link rel="dns-prefetch" href="https://nominatim.openstreetmap.org">
+    <link rel="dns-prefetch" href="https://overpass-api.de">
+
+    <!-- Structured data: helps search engines understand & rich-render the site -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://stephenojwang235-rgb.github.io/kenya-restaurants/#website",
+          "url": "https://stephenojwang235-rgb.github.io/kenya-restaurants/",
+          "name": "Kenya Restaurant Finder",
+          "description": "Live interactive map that finds restaurants in Kenya that don't yet have a website, with phone and WhatsApp contacts.",
+          "inLanguage": "en",
+          "publisher": { "@id": "https://stephenojwang235-rgb.github.io/kenya-restaurants/#app" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://stephenojwang235-rgb.github.io/kenya-restaurants/#app",
+          "name": "Kenya Restaurant Finder",
+          "url": "https://stephenojwang235-rgb.github.io/kenya-restaurants/",
+          "applicationCategory": "TravelApplication",
+          "applicationSubCategory": "Restaurant finder",
+          "operatingSystem": "Any (web browser)",
+          "browserRequirements": "Requires JavaScript",
+          "inLanguage": "en",
+          "isAccessibleForFree": true,
+          "description": "Interactive Leaflet map that locates restaurants in Kenya which do not yet have a website, lists their phone and WhatsApp contacts, and exports results to Excel.",
+          "featureList": [
+            "Live GPS location search",
+            "Search restaurants by town or by all 47 Kenyan counties",
+            "OpenStreetMap Overpass live queries",
+            "Extract phone and WhatsApp contacts",
+            "Export results to Excel",
+            "Continuous live GPS tracking"
+          ],
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KES" },
+          "audience": { "@type": "Audience", "audienceType": "Restaurants and food businesses in Kenya" }
+        }
+      ]
+    }
+    </script>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet"
@@ -33,14 +100,44 @@
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin="" />
 
-    <!-- SheetJS (xlsx) for Excel export -->
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
-    </script>
+    <!-- SheetJS (xlsx) for Excel export (deferred: only needed on click) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"
+            defer></script>
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
+    <!--
+      Crawlable / no-JS fallback content.
+      Search engines that do not execute JavaScript (and users with JS
+      disabled) still get real, keyword-rich text describing the app,
+      instead of an empty shell.
+    -->
+    <noscript>
+      <div class="seo-fallback">
+        <h1>Kenya Restaurant Finder — find Kenyan restaurants without a website</h1>
+        <p>
+          Kenya Restaurant Finder is a free interactive map that shows
+          restaurants across Kenya which do not yet have a website. It uses
+          live OpenStreetMap data and works entirely in your browser.
+        </p>
+        <h2>What you can do</h2>
+        <ul>
+          <li>Find restaurants within 5 km of your current GPS location.</li>
+          <li>Search any town or city in Kenya, or pick from all 47 counties.</li>
+          <li>See each restaurant's phone number and WhatsApp contact.</li>
+          <li>Export the results to an Excel spreadsheet.</li>
+          <li>Track your location live and re-search automatically as you move.</li>
+        </ul>
+        <p>
+          Coverage includes Nairobi, Mombasa, Kisumu, Nakuru, Eldoret, Thika,
+          Malindi, and every other town and county in Kenya. This application
+          requires JavaScript to display the live map.
+        </p>
+      </div>
+    </noscript>
+
     <div class="dashboard">
 
         <!-- ===== LEFT SIDEBAR ===== -->
@@ -162,19 +259,19 @@
         </button>
     </div>
 
-    <!-- Leaflet JS -->
+    <!-- Leaflet JS (deferred) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin="">
-    </script>
+            crossorigin=""
+            defer></script>
 
     <!-- Supabase JS v2 (cloud database — free, no API keys required) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 
     <!-- Project configuration (paste your Supabase URL + anon key here) -->
-    <script src="static/config.js"></script>
+    <script src="static/config.js" defer></script>
 
     <!-- App Script -->
-    <script src="static/script.js"></script>
+    <script src="static/script.js" defer></script>
 </body>
 </html>

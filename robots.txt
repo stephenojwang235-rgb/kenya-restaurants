@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# Exclude pages behind the static config (not a page, but keep it clean).
-Disallow: /static/config.js
+# Let crawlers discover the sitemap automatically.
+Sitemap: https://stephenojwang235-rgb.github.io/kenya-restaurants/sitemap.xml

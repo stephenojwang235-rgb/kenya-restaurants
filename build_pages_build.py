@@ -45,8 +45,17 @@ OUT_DIR = os.path.join(ROOT, "pages_build")
 # deployed, and the generated page uses relative `static/...` paths).
 OUT_ROOT_INDEX = os.path.join(ROOT, "index.html")
 
-# Static assets that should live inside the build (copied if missing).
-STATIC_ASSETS = ["script.js", "config.js", "style.css"]
+# Static assets that should live inside the build (copied if missing / synced).
+STATIC_ASSETS = [
+    "script.js",
+    "config.js",
+    "style.css",
+    "manifest.webmanifest",
+    "og-image.png",
+    "apple-touch-icon.png",
+    "icon-192.png",
+    "icon-512.png",
+]
 EXTRA_FILES = ["supabase_setup.sql", "README.md"]
 
 
