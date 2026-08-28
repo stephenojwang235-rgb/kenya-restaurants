@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Exclude pages behind the static config (not a page, but keep it clean).
+Disallow: /static/config.js

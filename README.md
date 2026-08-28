@@ -1,6 +1,10 @@
 # Kenya Restaurant Finder — Live Map
 
+> **🌐 Live site:** https://stephenojwang235-rgb.github.io/kenya-restaurants/
+
 An interactive map that finds restaurants **near your real-time location** that don't yet have a website, using a fully live, free mapping stack (Leaflet + OpenStreetMap Overpass API).
+
+---
 
 ## Features
 
@@ -105,7 +109,31 @@ To export from Supabase: Table Editor → **Export CSV**.
 - **static/script.js** - Geolocation, live Overpass fetch, marker rendering, Supabase saving, live tracking
 - **static/config.js** - Supabase Project URL + anon key (paste yours here)
 - **static/style.css** - Styling
+- **pages_build/** - Static build for the hosted site (GitHub Pages)
+- **build_pages_build.py** - Regenerates `pages_build/` from `templates/` + `static/`
+- **supabase/migrations/20260827_supabase_setup.sql** - Creates the `restaurants` table
+- **stealth_scraper.py** - Optional stealth scraper with multi-source phone-number fallback
 - **README.md** - This file
+
+## Deployment (GitHub Pages)
+
+The public site is hosted with **GitHub Pages** from the `main` branch root:
+`https://stephenojwang235-rgb.github.io/kenya-restaurants/`
+
+To update the hosted site after making changes to `templates/` or `static/`:
+
+```bash
+python build_pages_build.py   # regenerate pages_build/index.html from the source
+git add -A
+git commit -m "update site"
+git push origin main
+```
+
+GitHub Pages rebuilds automatically within a minute or two.
+
+## License
+
+No license specified — all rights reserved by default. Open an issue or contact the maintainer if you'd like to use this project.
 
 ## Troubleshooting
 
