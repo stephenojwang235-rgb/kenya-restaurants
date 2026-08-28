@@ -1,0 +1,14 @@
+# Dependencies for stealth_scraper.py
+# Install with:  pip install -r requirements-scraper.txt
+# Then fetch the Chromium build once:
+#     playwright install chromium
+#
+# Optional (live User-Agent pool instead of the bundled real strings):
+#     fake-useragent
+
+playwright>=1.44.0
+playwright-stealth>=1.0.6
+# Library used to validate/normalize raw phone numbers (loose-regex capture +
+# phonenumbers.parse / is_possible_number / is_valid_number).
+phonenumbers>=8.13.0
+# fake-useragent>=1.5.0

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kenya Restaurant Finder</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+
+    <!-- SheetJS (xlsx) for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="dashboard">
+
+        <!-- ===== LEFT SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>🍽️ Kenyan Restaurants</h1>
+                <p class="subtitle">Discover local dining across Kenya</p>
+            </div>
+
+            <div class="sidebar-controls">
+                <button id="btn-gps" class="btn-primary">📍 Use Current GPS Location</button>
+
+                <button id="btn-live" class="btn-secondary btn-live" style="margin-top:6px;width:100%;">
+                    🛰️ Live Tracking: OFF
+                </button>
+
+                <div class="search-row">
+                    <input type="text" id="search-input" placeholder="Enter a town/city in Kenya..." />
+                    <button id="btn-search" class="btn-secondary">🔍 Search</button>
+                </div>
+
+                <div class="county-row">
+                    <label for="county-select" class="control-label">Or select a County</label>
+                    <div class="select-wrapper">
+                        <select id="county-select">
+                            <option value="">-- Select County --</option>
+                            <option value="Baringo">Baringo</option>
+                            <option value="Bomet">Bomet</option>
+                            <option value="Bungoma">Bungoma</option>
+                            <option value="Busia">Busia</option>
+                            <option value="Elgeyo-Marakwet">Elgeyo-Marakwet</option>
+                            <option value="Embu">Embu</option>
+                            <option value="Garissa">Garissa</option>
+                            <option value="Homa Bay">Homa Bay</option>
+                            <option value="Isiolo">Isiolo</option>
+                            <option value="Kajiado">Kajiado</option>
+                            <option value="Kakamega">Kakamega</option>
+                            <option value="Kericho">Kericho</option>
+                            <option value="Kiambu">Kiambu</option>
+                            <option value="Kilifi">Kilifi</option>
+                            <option value="Kirinyaga">Kirinyaga</option>
+                            <option value="Kisii">Kisii</option>
+                            <option value="Kisumu">Kisumu</option>
+                            <option value="Kitui">Kitui</option>
+                            <option value="Kwale">Kwale</option>
+                            <option value="Laikipia">Laikipia</option>
+                            <option value="Lamu">Lamu</option>
+                            <option value="Machakos">Machakos</option>
+                            <option value="Makueni">Makueni</option>
+                            <option value="Mandera">Mandera</option>
+                            <option value="Marsabit">Marsabit</option>
+                            <option value="Meru">Meru</option>
+                            <option value="Migori">Migori</option>
+                            <option value="Mombasa">Mombasa</option>
+                            <option value="Murang'a">Murang'a</option>
+                            <option value="Nairobi">Nairobi</option>
+                            <option value="Nakuru">Nakuru</option>
+                            <option value="Nandi">Nandi</option>
+                            <option value="Narok">Narok</option>
+                            <option value="Nyamira">Nyamira</option>
+                            <option value="Nyandarua">Nyandarua</option>
+                            <option value="Nyeri">Nyeri</option>
+                            <option value="Samburu">Samburu</option>
+                            <option value="Siaya">Siaya</option>
+                            <option value="Taita-Taveta">Taita-Taveta</option>
+                            <option value="Tana River">Tana River</option>
+                            <option value="Tharaka-Nithi">Tharaka-Nithi</option>
+                            <option value="Trans-Nzoia">Trans-Nzoia</option>
+                            <option value="Turkana">Turkana</option>
+                            <option value="Uasin Gishu">Uasin Gishu</option>
+                            <option value="Vihiga">Vihiga</option>
+                            <option value="Wajir">Wajir</option>
+                            <option value="West Pokot">West Pokot</option>
+                        </select>
+                        <span class="select-arrow">▾</span>
+                    </div>
+                    <button id="btn-search-county" class="btn-secondary" style="margin-top:6px;width:100%;">🔍 Search County</button>
+                </div>
+
+                <div id="status" class="status-msg">
+                    <span class="status-icon">ℹ️</span>
+                    <span class="status-text">Search for restaurants to get started.</span>
+                </div>
+
+                <button id="btn-export-excel" class="btn-export" title="Download found restaurants as Excel">
+                    📥 Download Excel Report
+                </button>
+
+                <button id="btn-save-db" class="btn-secondary" style="margin-top:6px;width:100%;" title="Save found restaurants to your Supabase cloud database">
+                    ☁️ Save to Supabase
+                </button>
+
+                <button id="btn-refresh" class="btn-secondary" style="margin-top:6px;width:100%;">🔄 Refresh Here</button>
+            </div>
+
+            <!-- Restaurant Results List -->
+            <div id="results-list" class="results-list">
+                <div class="empty-state">
+                    <span class="empty-icon">🍽️</span>
+                    <div class="empty-title">No restaurants loaded yet</div>
+                    <div>Use GPS, search a location, or select a county above.</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== RIGHT MAP PANEL ===== -->
+        <main class="map-panel">
+            <div id="map"></div>
+            <div id="map-controls" class="map-controls">
+                <button id="btn-locate-all" class="map-btn" title="Fit all markers">
+                    ⊞ Fit All
+                </button>
+            </div>
+        </main>
+
+        <!-- Mobile toggle button (visible only on small screens) -->
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+            ☰
+        </button>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="">
+    </script>
+
+    <!-- Supabase JS v2 (cloud database — free, no API keys required) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Project configuration (paste your Supabase URL + anon key here) -->
+    <script src="/static/config.js"></script>
+
+    <!-- App Script -->
+    <script src="/static/script.js"></script>
+</body>
+</html>
