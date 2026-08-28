@@ -40,16 +40,19 @@ DEFAULT_BASE = "https://stephenojwang235-rgb.github.io/kenya-restaurants/"
 
 # (path, list of required-content-regexes, list of forbidden-content-markers)
 CHECKS = [
-    # The index must be OUR app: map + GPS button + SEO tags present, and
-    # no Jekyll placeholder markers.
+    # The index must be OUR app: map + GPS button + SEO/structured-data
+    # markers present, and no Jekyll placeholder markers.
     ("",
-     [r'id="map"', r'btn-gps', r'og:title'],
+     [r'id="map"', r'btn-gps', r'og:title', r'og:image',
+      r'application/ld\+json', r'<noscript>', r'name="robots"'],
      ["| kenya-restaurants", "skip-to-content"]),
     ("static/config.js", [r'supabase\.co'], []),
     ("static/script.js", [], []),
     ("static/style.css", [], []),
-    ("robots.txt", [r'User-agent'], []),
-    ("sitemap.xml", [r'<urlset'], []),
+    ("static/og-image.png", [], []),
+    ("static/manifest.webmanifest", [r'"name"'], []),
+    ("robots.txt", [r'User-agent', r'[Ss]itemap'], []),
+    ("sitemap.xml", [r'<urlset', r'<lastmod>'], []),
 ]
 
 
