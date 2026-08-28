@@ -1,6 +1,6 @@
-# ============================================================
-# Python / generic ignores
-# ============================================================
+# Tells GitHub Pages NOT to run Jekyll over this repo — serve our static
+# files as-is. Without this, Jekyll regenerates the index from README.md and
+# the site no longer shows the real app.
 __pycache__/
 *.py[cod]
 .venv/
