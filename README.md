@@ -154,6 +154,20 @@ No license specified — all rights reserved by default. Open an issue or contac
 - Ensure phone and computer are on the same WiFi
 - Check firewall allows Python on port 5000
 
+### Live site shows a 404 right after deploying
+This is almost always **transient CDN propagation**, not a real outage.
+GitHub Pages' edge cache can serve a stale 404 for a few seconds to a couple
+of minutes immediately after a rebuild — it resolves on its own. Wait a
+minute and hard-refresh (Ctrl+F5), or run the automated checker:
+
+```bash
+python check_site.py          # retries automatically, verifies real content
+```
+
+If a 404 genuinely persists, check that `index.html` and `.nojekyll` exist at
+the repo root (Jekyll off + root entry point are both required) and that
+Settings → Pages points at `main` / `(root)`.
+
 ## Technical Details
 
 - **Backend**: Flask with Waitress production server (serves static files only)
