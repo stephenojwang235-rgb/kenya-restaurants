@@ -40,6 +40,10 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(ROOT, "templates", "index.html")
 OUT_INDEX = os.path.join(ROOT, "pages_build", "index.html")
 OUT_DIR = os.path.join(ROOT, "pages_build")
+# GitHub Pages serves from the repo ROOT of `main`, so the entry HTML must
+# also exist at the repository root (the root `static/` folder is already
+# deployed, and the generated page uses relative `static/...` paths).
+OUT_ROOT_INDEX = os.path.join(ROOT, "index.html")
 
 # Static assets that should live inside the build (copied if missing).
 STATIC_ASSETS = ["script.js", "config.js", "style.css"]
@@ -89,6 +93,11 @@ def main() -> None:
     with open(OUT_INDEX, "w", encoding="utf-8", newline="") as fh:
         fh.write(html)
 
+    # Also publish the same page at the repo root — GitHub Pages serves the
+    # root of `main`, so `index.html` must exist there for the site to load.
+    with open(OUT_ROOT_INDEX, "w", encoding="utf-8", newline="") as fh:
+        fh.write(html)
+
     # Also make sure the extra deploy files exist in the build.
     for extra in EXTRA_FILES:
         src = os.path.join(ROOT, extra)
@@ -98,6 +107,7 @@ def main() -> None:
             logger.info("Copied %s", extra)
 
     logger.info("Wrote %s (%d bytes, UTF-8 no BOM)", OUT_INDEX, len(html.encode("utf-8")))
+    logger.info("Wrote %s (repo-root entry point for GitHub Pages)", OUT_ROOT_INDEX)
     logger.info("Done. Ready to upload the contents of pages_build/ to GitHub Pages.")
 
 
